@@ -8,12 +8,16 @@ Its structure was created using a converted Finnish wooden sauna and soundproofe
 Mycelium soundproofing panels were designed through participatory workshops using 3d-printed Hangul (Korean writing system) inspired tiles, hosted by BioMakers Lab. Over 50 people from Aalto community and beyond participated.
 
 Core team members: Jin Youn, Shawn Kim, Heya Kwon
+
 Extended team members and collaborators: Harvey Shaw, Daein Kang, Harim Kwon, Kemal Yalçın
 
 Funded by: Sustainability Action Booster
+
+Sponsored by: Singa
 
 You can follow our journey on instagram: @noraebang_fi.
 
 -----
 Our official opening is 24th of August 2026.
+
 This website will be updated soon with more fun graphics and images :)
