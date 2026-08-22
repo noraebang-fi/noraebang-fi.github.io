@@ -96,6 +96,82 @@
   }
   .hint svg { width: 14px; height: 14px; opacity: 0.7; }
 
+  .hud-details {
+  pointer-events: auto;
+  margin-top: 4px;
+}
+.about-toggle {
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+  list-style: none;
+  padding: 2px 0;
+  width: fit-content;
+}
+.about-toggle::-webkit-details-marker { display: none; }
+.about-toggle::before {
+  content: "+ ";
+  color: var(--accent);
+}
+.hud-details[open] .about-toggle::before {
+  content: "− ";
+}
+.hud-desc {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  max-width: min(400px, calc(100vw - 64px));
+  margin-top: 8px;
+}
+
+.hud {
+  max-width: min(420px, calc(100vw - 64px));
+}
+
+@media (max-width: 640px) {
+  .hud {
+    left: 16px;
+    top: 16px;
+  }
+  .hud .brand {
+    font-size: 26px;
+  }
+  .hud .eyebrow {
+    font-size: 9px;
+  }
+  .hud-desc {
+    font-size: 11px;
+    max-height: 38vh;
+    overflow-y: auto;
+  }
+  .face-circle {
+    width: 84px;
+    height: 84px;
+    margin-left: -42px;
+    margin-top: -42px;
+  }
+  .face-circle.empty::after {
+    font-size: 20px;
+  }
+  .credits {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    max-width: none;
+    text-align: left;
+    font-size: 10px;
+  }
+  .hint {
+    bottom: 8px;
+    font-size: 10px;
+  }
+  #face-popup {
+    max-width: 180px;
+    padding: 10px 12px;
+  }
+}
+
   /* ---------- face circles ---------- */
   #faces-layer {
     position: fixed;
@@ -268,19 +344,22 @@
   <div class="brand">NORAEBANG 노래방</div>
   <div class="eyebrow">SUSTAINABILITY + CULTURE + COMMUNITY + FUN!</div>
   <br/>
-  <h1>Noraebang is the first Korean style singing booth (noraebang / private karaoke) in Finland, where you can sing alone or with a few other friends in a private space, without any pressure of performing for an audience or need to drink alcohol.<br/><br/>
+  <details class="hud-details">
+  <summary class="about-toggle">About</summary>
+  <div class="hud-desc">
+    Noraebang is the first Korean style singing booth (noraebang / private karaoke) in Finland, where you can sing alone or with a few other friends in a private space, without any pressure of performing for an audience or need to drink alcohol.<br/><br/>
 
-Its structure was created using a converted Finnish wooden sauna (birch wood) and soundproofed through bio-based materials like wood-fiber foam (created by Circular Foams) and mycelium.<br/><br/>
+    Its structure was created using a converted Finnish wooden sauna (birch wood) and soundproofed through bio-based materials like wood-fiber foam (created by Circular Foams) and mycelium.<br/><br/>
 
-Mycelium soundproofing panels were designed through participatory workshops using 3D-printed tiles inspired by 한글 / Hangul (Korean writing system) at BioMakers Studio. Over 50 people from Aalto community and beyond participated.<br/><br/>
+    Mycelium soundproofing panels were designed through participatory workshops using 3D-printed tiles inspired by 한글 / Hangul (Korean writing system) at BioMakers Studio. Over 50 people from Aalto community and beyond participated.<br/><br/>
 
-Little back story: Jin, Shawn, and Heya--art and design students at Aalto from Korea--started the project last year after being fascinated by Finland's love for karaoke and sauna while also feeling nostalgic for a cozy, Korean-style singing booth. We started to ponder how to recreate a Korean noraebang with a Finnish flavor and integrate the principle of sustainability. While doing so, some of our friends joined along the way and we are so proud of this project!<br/><br/>
+    Little back story: Jin, Shawn, and Heya--art and design students at Aalto from Korea--started the project last year after being fascinated by Finland's love for karaoke and sauna while also feeling nostalgic for a cozy, Korean-style singing booth. We started to ponder how to recreate a Korean noraebang with a Finnish flavor and integrate the principle of sustainability. While doing so, some of our friends joined along the way and we are so proud of this project!<br/><br/>
 
----------<br/><br/>
+    ---------<br/><br/>
 
-Find our booth the 1st floor of Abloc building, by K-market (Otaniementie 12, 02150 Espoo) ♡.<br/><br/>
-
-</h1>
+    Find our booth the 1st floor of Abloc building, by K-market (Otaniementie 12, 02150 Espoo) ♡.<br/><br/>
+  </div>
+</details>
 </div>
 
 <div class="credits">
@@ -517,28 +596,29 @@ const MODEL_BASE64 = "Z2xURgIAAACMRAIAQAQAAEpTT057ImFjY2Vzc29ycyI6W3siYnVmZmVyVm
   function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
 
   function layoutCircles() {
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    const cx = w / 2;
-    const cy = h / 2;
-    const minR = Math.min(w, h) * 0.24;
-    const maxR = Math.min(w, h) * 0.5;
-    const placed = [];
-    circles.forEach((el) => {
-      if (el.dataset.placed) return; // don't reset a circle the user has dragged
-      let x, y, tries = 0;
-      do {
-        const angle = Math.random() * Math.PI * 2;
-        const r = minR + Math.random() * (maxR - minR);
-        x = clamp(cx + r * Math.cos(angle), 100, w - 100);
-        y = clamp(cy + r * Math.sin(angle), 100, h - 100);
-        tries++;
-      } while (tries < 40 && placed.some(p => Math.hypot(p.x - x, p.y - y) < 190));
-      placed.push({ x, y });
-      el.style.left = x + 'px';
-      el.style.top = y + 'px';
-    });
-  }
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  const cx = w / 2;
+  const cy = h / 2;
+  const r = circleRadius();
+  const minR = Math.min(w, h) * (isMobile() ? 0.3 : 0.24);
+  const maxR = Math.min(w, h) * (isMobile() ? 0.42 : 0.5);
+  const placed = [];
+  circles.forEach((el) => {
+    if (el.dataset.placed) return;
+    let x, y, tries = 0;
+    do {
+      const angle = Math.random() * Math.PI * 2;
+      const rad = minR + Math.random() * (maxR - minR);
+      x = clamp(cx + rad * Math.cos(angle), r + 8, w - r - 8);
+      y = clamp(cy + rad * Math.sin(angle), r + 8, h - r - 8);
+      tries++;
+    } while (tries < 40 && placed.some(p => Math.hypot(p.x - x, p.y - y) < r * 2 + 30));
+    placed.push({ x, y });
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+  });
+}
   layoutCircles();
   window.addEventListener('resize', layoutCircles);
 
@@ -561,8 +641,9 @@ const MODEL_BASE64 = "Z2xURgIAAACMRAIAQAQAAEpTT057ImFjY2Vzc29ycyI6W3siYnVmZmVyVm
     const dx = x - startX;
     const dy = y - startY;
     if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
-    const newLeft = clamp(origLeft + dx, 80, window.innerWidth - 80);
-    const newTop = clamp(origTop + dy, 80, window.innerHeight - 80);
+    const r = circleRadius();
+    const newLeft = clamp(origLeft + dx, r + 8, window.innerWidth - r - 8);
+    const newTop = clamp(origTop + dy, r + 8, window.innerHeight - r - 8);
     active.style.left = newLeft + 'px';
     active.style.top = newTop + 'px';
   }
@@ -604,10 +685,11 @@ const MODEL_BASE64 = "Z2xURgIAAACMRAIAQAQAAEpTT057ImFjY2Vzc29ycyI6W3siYnVmZmVyVm
     popupSub.style.display = sub ? 'block' : 'none';
 
     const left = parseFloat(el.style.left);
-    const top = parseFloat(el.style.top) - 74;
+    const top = parseFloat(el.style.top) - circleRadius();
     popup.style.left = left + 'px';
     popup.style.top = top + 'px';
     popup.classList.add('visible');
+    
   }
   function hidePopup() {
     popup.classList.remove('visible');
@@ -633,6 +715,7 @@ const MODEL_BASE64 = "Z2xURgIAAACMRAIAQAQAAEpTT057ImFjY2Vzc29ycyI6W3siYnVmZmVyVm
     popup.style.top = top + 'px';
     popup.classList.add('visible');
   }
+  
 
   document.addEventListener('mousedown', (e) => {
     if (!popup.contains(e.target) && !e.target.classList.contains('face-circle')) {
@@ -640,6 +723,10 @@ const MODEL_BASE64 = "Z2xURgIAAACMRAIAQAQAAEpTT057ImFjY2Vzc29ycyI6W3siYnVmZmVyVm
     }
   });
 })();
+
+// Mobile
+function isMobile() { return window.matchMedia('(max-width: 640px)').matches; }
+function circleRadius() { return isMobile() ? 42 : 74; } // half of 84px / 148px
 </script>
 
 </body>
