@@ -183,6 +183,18 @@
     border-right: 1px solid rgba(255,59,59,0.85);
     border-bottom: 1px solid rgba(255,59,59,0.85);
   }
+  #face-popup .fp-role {
+  margin-top: 4px;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--text-dim);
+  }
+  #face-popup .fp-instagram {
+    margin-top: 4px;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: #ff3b3b;
+  }
 
   #loading {
     position: fixed;
@@ -221,17 +233,19 @@
 <div id="stage"></div>
 
 <div id="faces-layer">
-  <div class="face-circle" data-name="Daein" data-sub="" style="background-image:url('profile_pics/kemal.png')"></div>
-  <div class="face-circle" data-name="Daein" data-sub="" style="background-image:url(profile_pics/daein.jpeg)"></div>
-  <div class="face-circle" data-name="Heya" data-sub="" style="background-image:url(profile_pics/heya.jpg)"></div>
-  <div class="face-circle empty" data-name=" " data-sub="Empty slot"></div>
-  <div class="face-circle empty" data-name=" " data-sub="Empty slot"></div>
-  <div class="face-circle empty" data-name=" " data-sub="Empty slot"></div>
-  <div class="face-circle empty" data-name=" " data-sub="Empty slot"></div>
+  <div class="face-circle" data-name="Kemal" data-role="Designer" data-instagram="@kkemaly" data-sub="" style="background-image:url('profile_pics/kemal.png')"></div>
+  <div class="face-circle" data-name="Daein" data-role="Designer/Interior Architect" data-instagram="@dain_dd" data-sub="" style="background-image:url(profile_pics/daein.jpeg)"></div>
+  <div class="face-circle" data-name="Heya" data-role="Artist/Researcher" data-instagram="@heya.world" data-sub="" style="background-image:url(profile_pics/heya.jpg)"></div>
+  <div class="face-circle empty" data-name=" " data-role="Designer" data-instagram="@kemal.k" data-sub="Empty slot"></div>
+  <div class="face-circle empty" data-name=" "  data-role="Designer" data-instagram="@kemal.k"data-sub="Empty slot"></div>
+  <div class="face-circle empty" data-name=" "  data-role="Designer" data-instagram="@kemal.k"data-sub="Empty slot"></div>
+  <div class="face-circle empty" data-name=" " data-role="Designer" data-instagram="@kemal.k"data-sub="Empty slot"></div>
 </div>
 
 <div id="face-popup">
   <div class="fp-name"></div>
+  <div class="fp-role"></div>
+  <div class="fp-instagram"></div>
   <div class="fp-sub"></div>
 </div>
 
@@ -478,7 +492,8 @@ const MODEL_BASE64 = "Z2xURgIAAACMRAIAQAQAAEpTT057ImFjY2Vzc29ycyI6W3siYnVmZmVyVm
   const popup = document.getElementById('face-popup');
   const popupName = popup.querySelector('.fp-name');
   const popupSub = popup.querySelector('.fp-sub');
-
+  const popupRole = popup.querySelector('.fp-role');
+  const popupInstagram = popup.querySelector('.fp-instagram');
   // ---------- scattered layout ----------
   function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
 
@@ -577,6 +592,27 @@ const MODEL_BASE64 = "Z2xURgIAAACMRAIAQAQAAEpTT057ImFjY2Vzc29ycyI6W3siYnVmZmVyVm
   }
   function hidePopup() {
     popup.classList.remove('visible');
+  }
+
+  function showPopup(el) {
+    const name = el.dataset.name || '—';
+    const role = el.dataset.role || '';
+    const instagram = el.dataset.instagram || '';
+    const sub = el.dataset.sub || '';
+
+    popupName.textContent = name;
+    popupRole.textContent = role;
+    popupRole.style.display = role ? 'block' : 'none';
+    popupInstagram.textContent = instagram;
+    popupInstagram.style.display = instagram ? 'block' : 'none';
+    popupSub.textContent = sub;
+    popupSub.style.display = sub ? 'block' : 'none';
+
+    const left = parseFloat(el.style.left);
+    const top = parseFloat(el.style.top) - 74;
+    popup.style.left = left + 'px';
+    popup.style.top = top + 'px';
+    popup.classList.add('visible');
   }
 
   document.addEventListener('mousedown', (e) => {
